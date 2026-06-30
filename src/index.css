@@ -1,0 +1,38 @@
+body{
+  background-color: rgb(218, 90, 90)!important;
+}
+
+.topbar{
+   background:#d9d9d9;
+    min-height:180px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+  
+  
+}
+
+.topbar h1{
+    margin:0;
+    font-weight:700;
+    color:#000;
+    text-align:center;
+
+    /* Reszponzív betűméret */
+    font-size:clamp(2rem, 6vw, 5rem);
+}
+
+.footer{
+  background-color: rgb(40, 40, 40);
+  color: white;
+
+}
+.footer li{
+    list-style: none;
+}
+
+/* AI lent  */
+
+
+/*  */
