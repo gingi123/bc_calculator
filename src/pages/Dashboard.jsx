@@ -50,7 +50,7 @@ function simulate(angle_rad, v0, BC_imp, massKg, bcType, scopeH, temp_C, pressur
     const results = {};
     const tset = new Set(targets);
 
-    for (let step = 0; step < 5000; step++) {
+    for (let step = 0; step < 7000; step++) {
         const v = Math.sqrt(vx * vx + vy * vy);
         if (v < 50) break;
 
@@ -81,7 +81,7 @@ function simulate(angle_rad, v0, BC_imp, massKg, bcType, scopeH, temp_C, pressur
         }
 
         x = newX; y = newY; vx = newVx; vy = newVy;
-        if (x > 1050) break;
+        if (x > 1550) break;
     }
     return results;
 }
@@ -89,7 +89,7 @@ function simulate(angle_rad, v0, BC_imp, massKg, bcType, scopeH, temp_C, pressur
 function calculateBallistics({ BC, bcType, weightGrain, v0_ms, scopeHeightMm, zeroDistance_m, temp_C, pressure_hPa }) {
     const massKg = weightGrain * 0.00006479891;
     const scopeH = scopeHeightMm / 1000;
-    const allT = [...new Set([zeroDistance_m, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000])].sort((a, b) => a - b);
+    const allT = [...new Set([zeroDistance_m, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400 ,1500])].sort((a, b) => a - b);
 
     let lo = -0.003, hi = 0.015;
     for (let i = 0; i < 70; i++) {
@@ -101,7 +101,7 @@ function calculateBallistics({ BC, bcType, weightGrain, v0_ms, scopeHeightMm, ze
     const pts = simulate(zeroAngle, v0_ms, BC, massKg, bcType, scopeH, temp_C, pressure_hPa, allT);
 
     const rows = [];
-    for (const d of [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]) {
+    for (const d of [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400 ,1500]) {
         const p = pts[d];
         if (!p) continue;
         const dcm = p.y * 100;
@@ -118,6 +118,7 @@ function calculateBallistics({ BC, bcType, weightGrain, v0_ms, scopeHeightMm, ze
         });
     }
     return rows;
+
 }
 
 // ============================================================
@@ -137,6 +138,7 @@ const defaultState = {
     tempType: 'c',
     pressure: '1013',
 };
+    
 
 export default function Dashboard() {
     const [form, setForm] = useState(defaultState);
@@ -161,6 +163,8 @@ export default function Dashboard() {
         }
         if (BC <= 0 || BC > 2) { setError('BC értéke 0 és 2 között legyen!'); return; }
         if (speed <= 0 || speed > 2000) { setError('Sebesség értéke érvénytelen!'); return; }
+        if (weight <= 0 || weight > 600) { setError('Tömeg értéke érvénytelen!'); return; }
+      
 
         const v0_ms = form.speedType === 'fps' ? speed * 0.3048 : speed;
         const weightGrain = form.weightType === 'gramm' ? weight / 0.00006479891 : weight;
@@ -182,32 +186,7 @@ export default function Dashboard() {
         }
     };
 
-    const Field = ({ label, inputKey, placeholder, unitKey, units }) => (
-        <div className="mb-3">
-            <label className="form-label fw-semibold small text-secondary">{label}</label>
-            <div className="input-group">
-                <input
-                    type="number"
-                    className="form-control"
-                    placeholder={placeholder}
-                    value={form[inputKey]}
-                    onChange={e => set(inputKey, e.target.value)}
-                />
-                {units && (
-                    <select
-                        className="form-select"
-                        style={{ maxWidth: 100 }}
-                        value={form[unitKey]}
-                        onChange={e => set(unitKey, e.target.value)}
-                    >
-                        {units.map(([val, label]) => (
-                            <option key={val} value={val}>{label}</option>
-                        ))}
-                    </select>
-                )}
-            </div>
-        </div>
-    );
+    
 
     return (
         <div className="container py-4" style={{ maxWidth: 720 }}>
