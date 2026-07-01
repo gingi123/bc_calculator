@@ -4,7 +4,7 @@ import '../index.css'
 const Topbar = () => {
   return (
     <div   className='topbar mb-5'>
-        <h1>Ballistic Calculator Europe</h1>
+        <h1>Ballistic Calculator (test)</h1>
     </div>
   )
 }
